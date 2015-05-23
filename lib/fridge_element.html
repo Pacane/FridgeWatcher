@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<link rel="import" href="../../packages/polymer/polymer.html">
+<polymer-element name="fridge-element" extends="li" attributes="item">
+    <template>
+        <style>
+            .expired {
+                color: red;
+            }
+
+            :host {
+                list-style: none;
+                margin: 7px;
+            }
+        </style>
+
+        <paper-checkbox id="delete-item" on-change="{{onCheckChanged}}"></paper-checkbox> {{ item.name }}
+        <template if="{{ item.isExpired }}">
+            <span class="expired"><span>! </span>Expires on: {{ formatter.format(item.expiresOn) }}</span>
+        </template>
+        <template if="{{ !item.isExpired }}">
+            <span>Expires on: {{ formatter.format(item.expiresOn) }}</span>
+        </template>
+
+
+
+    </template>
+    <script type="application/dart" src="fridge_element.dart"></script>
+</polymer-element>

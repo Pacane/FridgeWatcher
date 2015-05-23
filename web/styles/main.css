@@ -1,13 +1,64 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css?family=RobotoDraft);
 
 html, body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'RobotoDraft', sans-serif;
 }
 
-.super-duper {
-    color: green;
+body {
+    font-family: "RobotoDraft";
+    font-weight: 300;
+}
+
+core-animated-pages {
+    width: 85%;
+    height: 85%;
+    -webkit-user-select: none;
+    overflow: hidden;
+}
+
+core-animated-pages > * {
+    border-radius: 5px;
+    font-size: 50px;
+    background-color: white;
+}
+
+body /deep/ core-toolbar {
+    background-color: #2196F3;
+    color: #fff;
+}
+
+core-menu {
+    color: #1976D2;
+    margin: 10px 0 0 0;
+}
+
+core-menu > paper-item {
+    transition: all 300ms ease-in-out;
+}
+
+paper-item a {
+    text-decoration: none;
+    color: currentcolor;
+    margin-left: 5px;
+}
+
+core-menu > paper-item.core-selected {
+    background: #e1f5fe;
+}
+
+.dark-primary-color    { background: #1976D2; }
+.default-primary-color { background: #2196F3; }
+.light-primary-color   { background: #BBDEFB; }
+.text-primary-color    { color: #FFFFFF; }
+.accent-color          { background: #4CAF50; }
+.primary-text-color    { color: #212121; }
+.secondary-text-color  { color: #727272; }
+.divider-color         { border-color: #B6B6B6; }
+
+paper-fab {
+    background-color: #4CAF50;
 }
