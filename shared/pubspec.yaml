@@ -1,0 +1,14 @@
+name: 'fridge_watcher_shared'
+version: 0.0.1
+description:
+  Shared entities of FridgeWatcher
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+dependencies:
+  redstone_mapper: '0.2.0-beta.1'
+  redstone_mapper_mongo: '0.2.0-beta.1'
+dependency_overrides:
+  redstone_mapper:
+    git:
+      url: git://github.com/Pacane/redstone_mapper.git
+      ref: update-analyzer-dependency

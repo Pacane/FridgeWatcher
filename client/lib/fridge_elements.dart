@@ -12,10 +12,14 @@ import 'package:fridge_watcher/item_deleted_event.dart';
 import 'package:core_elements/core_input.dart';
 import 'package:intl/intl.dart';
 import 'dart:html';
+import 'package:http/http.dart' as http;
+import 'package:http/browser_client.dart';
+import 'package:fridge_watcher_shared/fridge_item.dart';
+import 'dart:async';
 
 @CustomTag('fridge-elements')
 class FridgeElements extends PolymerElement {
-  @observable final ObservableList<FridgeItem> tasks = toObservable([]);
+  @observable final ObservableList<FridgeItemViewModel> tasks = toObservable([]);
   @observable Watcher app;
 
   FridgeElements.created() : super.created() {
@@ -24,11 +28,17 @@ class FridgeElements extends PolymerElement {
     _addSeedData();
   }
 
-  void attached() {
-    eventBus.on(ItemDeletedEvent).listen((ItemDeletedEvent event) => deleteItem(event.item));
+  Future fetchFridgeItems() async {
+    FridgeItemsService fridgeItemsService = new FridgeItemService();
   }
 
-  void deleteItem(FridgeItem item) {
+  void attached() {
+    eventBus.on(ItemDeletedEvent).listen((ItemDeletedEvent event) => deleteItem(event.item));
+
+    fetchFridgeItems();
+  }
+
+  void deleteItem(FridgeItemViewModel item) {
     tasks.remove(item);
   }
 
@@ -44,14 +54,14 @@ class FridgeElements extends PolymerElement {
 
     DateTime expirationDate = formatter.parse(expirationDateString);
 
-    tasks.add(new FridgeItem(itemName, expiresOn: expirationDate));
+    tasks.add(new FridgeItemViewModel(itemName, expiresOn: expirationDate));
 
     sortItemsByExpirationDate(tasks);
   }
 
-  Iterable<FridgeItem> sortItemsByExpirationDate(List<FridgeItem> items) {
+  Iterable<FridgeItemViewModel> sortItemsByExpirationDate(List<FridgeItemViewModel> items) {
     return items
-      ..sort((FridgeItem a, FridgeItem b) {
+      ..sort((FridgeItemViewModel a, FridgeItemViewModel b) {
         if (a.expiresOn.isBefore(b.expiresOn)) return -1;
         else if (a.expiresOn.isAfter(b.expiresOn)) return 1;
         else return 0;

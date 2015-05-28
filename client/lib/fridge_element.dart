@@ -14,7 +14,7 @@ class FridgeElement extends LIElement with Polymer, Observable {
   }
 
   @observable String name = "bobby";
-  @observable FridgeItem item;
+  @observable FridgeItemViewModel item;
   @observable DateFormat formatter = new DateFormat('dd-MM-yyyy');
 
   void onCheckChanged() {

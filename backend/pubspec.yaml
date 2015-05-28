@@ -1,0 +1,17 @@
+name: 'fridge_watcher_backend'
+version: 0.0.1
+description: >
+  Backend of FridgeWatcher
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+dependencies:
+  di: any
+  http: any
+  query_string: any
+  mongo_dart: any
+  redstone: 0.6.0-beta.1+1
+  redstone_mapper: any
+  redstone_mapper_mongo: any
+  shelf: any
+  fridge_watcher_shared:
+    path: ../shared
