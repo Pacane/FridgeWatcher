@@ -1,1 +1,0 @@
-library fridge_watcher;

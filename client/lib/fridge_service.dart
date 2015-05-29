@@ -7,7 +7,9 @@ import 'package:fridge_watcher_shared/fridge_item.dart';
 import 'package:redstone_mapper/mapper.dart';
 import 'package:redstone_mapper/mapper_factory.dart';
 import 'dart:convert';
+import 'package:di/di.dart';
 
+@Injectable()
 class FridgeService {
   http.Client client = new BrowserClient();
   Future<Iterable<FridgeItem>> getItems() async {
