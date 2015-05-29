@@ -33,3 +33,4 @@ transformers:
     entry_points:
     - web/index.html
 - redstone_mapper
+- di

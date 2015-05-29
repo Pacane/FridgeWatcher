@@ -10,21 +10,20 @@
             <div class="list-container col-md-4">
                 <h2>Current</h2>
                 <ul class="list-unstyled">
-                    <template repeat="{{task in tasks}}">
-                        <li is="fridge-element" item="{{task}}"></li>
+                    <template repeat="{{item in fridgeItems}}">
+                        <li is="fridge-element" viewModel="{{item}}"></li>
                     </template>
                 </ul>
             </div>
         </div>
-        <paper-input-decorator label="Name of the item" >
+        <paper-input-decorator label="Name of the item">
             <input id="item-name" is="core-input">
         </paper-input-decorator>
         <!--<paper-input-decorator label="Expiration date (dd/mm/yyyy)">-->
-            <!--<input id="expiration-date" is="core-input">-->
+        <!--<input id="expiration-date" is="core-input">-->
         <!--</paper-input-decorator>-->
         <input id="expiration-date" type="date">
         <paper-fab class="add-button" icon="add" on-click="{{addItem}}"></paper-fab>
-        <button on-click="{{download}}">Download</button>
     </template>
     <script type="application/dart" src="fridge_elements.dart"></script>
 </polymer-element>

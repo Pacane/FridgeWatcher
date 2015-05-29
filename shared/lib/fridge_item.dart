@@ -12,4 +12,9 @@ class FridgeItem {
   DateTime addedOn;
   @Field()
   DateTime expiresOn;
+
+  String toString() {
+    return "ID: $id Name: $name AddedOn: $addedOn ExpiresOn: $expiresOn";
+  }
+
 }

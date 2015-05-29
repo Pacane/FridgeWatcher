@@ -1,7 +1,6 @@
 library interceptors;
 
 import 'package:redstone/redstone.dart' as app;
-import 'package:shelf/shelf.dart' as shelf;
 
 @app.Group("/")
 class Interceptors {
