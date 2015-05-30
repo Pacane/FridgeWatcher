@@ -14,24 +14,26 @@ import 'dart:html';
 import 'package:fridge_watcher_shared/fridge_item.dart';
 import 'dart:async';
 import 'package:fridge_watcher/fridge_service.dart';
+import 'package:fridge_watcher/di.dart';
 
 @CustomTag('fridge-elements')
-class FridgeElements extends PolymerElement {
+class FridgeElements extends PolymerElement with DiConsumer {
   @observable final ObservableList<FridgeItemViewModel> fridgeItems =
       toObservable([]);
   @observable Watcher app;
+
+  FridgeService fridgeService;
 
   FridgeElements.created() : super.created() {
     appModel.tasks = fridgeItems;
   }
 
   Future fetchFridgeItems() async {
-    FridgeService fridgeItemsService = new FridgeService();
-    Iterable<FridgeItem> items = await fridgeItemsService.getItems();
+    Iterable<FridgeItem> items = await fridgeService.getItems();
 
     Iterable viewModels = items.map((FridgeItem fi) {
       return new FridgeItemViewModel(fi.name,
-          addedOn: fi.addedOn, expiresOn: fi.expiresOn);
+          addedOn: fi.addedOn, expiresOn: fi.expiresOn, id: fi.id);
     });
 
     fridgeItems.clear();
@@ -52,14 +54,14 @@ class FridgeElements extends PolymerElement {
         .on(ItemDeletedEvent)
         .listen((ItemDeletedEvent event) => deleteItem(event.item));
 
-    fetchFridgeItems();
+    inject(this, [FridgeService]);
   }
 
   void deleteItem(FridgeItemViewModel item) {
     fridgeItems.remove(item);
   }
 
-  void addItem() {
+  Future addItem() async {
     String itemName = ($['item-name'] as CoreInput).value;
     String expirationDateString = ($['expiration-date'] as InputElement).value;
     DateTime expirationDate = null;
@@ -69,6 +71,10 @@ class FridgeElements extends PolymerElement {
 
       expirationDate = formatter.parse(expirationDateString);
     }
+
+    FridgeItem addedItem = await fridgeService.addItem(new FridgeItem()
+      ..name = itemName
+      ..expiresOn = expirationDate);
 
     fridgeItems
         .add(new FridgeItemViewModel(itemName, expiresOn: expirationDate));
@@ -85,5 +91,12 @@ class FridgeElements extends PolymerElement {
         else return 0;
       })
       ..reversed;
+  }
+
+  @override
+  void initDiContext(Map<Type, dynamic> context) {
+    fridgeService = context[FridgeService];
+
+    fetchFridgeItems();
   }
 }

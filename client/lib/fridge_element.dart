@@ -10,6 +10,7 @@ import 'package:fridge_watcher/event_bus.dart';
 import 'package:fridge_watcher/item_deleted_event.dart';
 import 'package:fridge_watcher/di.dart';
 import 'package:fridge_watcher/fridge_service.dart';
+import 'dart:async';
 
 @CustomTag('fridge-element')
 class FridgeElement extends LIElement with Polymer, Observable, DiConsumer {
@@ -25,19 +26,16 @@ class FridgeElement extends LIElement with Polymer, Observable, DiConsumer {
   @observable DateFormat formatter = new DateFormat('dd-MM-yyyy');
   FridgeService fridgeService;
 
-  void onCheckChanged() {
+  Future onCheckChanged() async {
     bool checked = ($['delete-item'] as PaperCheckbox).checked;
     if (checked) {
+      await fridgeService.deleteItem(viewModel.id);
       eventBus.fire(new ItemDeletedEvent(viewModel));
     }
-
-    print(viewModel);
   }
 
   @override
   void initDiContext(Map<Type, dynamic> context) {
     fridgeService = context[FridgeService];
-    print("Initialized Di context");
-    print(fridgeService);
   }
 }

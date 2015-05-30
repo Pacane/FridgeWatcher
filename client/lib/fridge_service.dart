@@ -21,4 +21,35 @@ class FridgeService {
     var decodedItems = JSON.decode(response.body);
     return decodedItems.map((Map m) => decode(m, FridgeItem));
   }
+
+  Future deleteItem(String id) async {
+    bootstrapMapper();
+
+    http.Response response =
+        await client.delete('http://localhost:8082/api/items/$id');
+
+    if (response.statusCode != 200) {
+      throw new Exception("Couldn't delete item with id : $id");
+    }
+  }
+
+  Future<FridgeItem> addItem(FridgeItem fridgeItem) async {
+    bootstrapMapper();
+
+    var bob = encodeJson(fridgeItem);
+
+    print(bob);
+
+    http.Response response = await client.post(
+        'http://localhost:8082/api/items',
+        headers: {'Content-type': 'application/json'}, body: bob);
+
+    if (response.statusCode != 200) {
+      throw new Exception("Couldn't add item : ${fridgeItem.name}");
+    }
+
+    FridgeItem result = decode(JSON.decode(response.body), FridgeItem);
+
+    return result;
+  }
 }

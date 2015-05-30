@@ -4,11 +4,10 @@ library fridge_watcher;
 
 import 'package:polymer/polymer.dart';
 import 'package:redstone_mapper/mapper_factory.dart';
-
 import 'package:fridge_watcher/di.dart';
 import 'package:fridge_watcher/module.dart';
-
 import 'package:fridge_watcher/fridge_service.dart';
+import 'package:di/di.dart';
 
 main() {
   DiContext diContext = new DiContext();

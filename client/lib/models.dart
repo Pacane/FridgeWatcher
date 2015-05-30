@@ -27,14 +27,14 @@ class Watcher extends Observable {
  * task with a taskID is considered saved.
  */
 class FridgeItemViewModel extends Observable {
-  @observable int itemID;
+  @observable String id;
   @observable String name = '';
   @observable DateTime addedOn;
   @observable DateTime expiresOn;
 
   FridgeItemViewModel.unsaved();
 
-  FridgeItemViewModel(this.name, {this.addedOn: null, this.expiresOn: null}) {
+  FridgeItemViewModel(this.name, {this.addedOn: null, this.expiresOn: null, this.id: null}) {
     if (addedOn == null) {
       addedOn = new DateTime.now();
     }
@@ -45,7 +45,7 @@ class FridgeItemViewModel extends Observable {
   }
 
   bool get isExpired => new DateTime.now().isAfter(expiresOn);
-  bool get saved => itemID != null;
+  bool get saved => id != null;
 
   String toString() {
     return "$name : $addedOn : $expiresOn";

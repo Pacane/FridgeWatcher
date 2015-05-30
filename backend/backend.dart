@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:fridge_watcher_shared/fridge_item.dart';
 import 'package:fridge_watcher_backend/interceptors.dart';
 import 'package:di/di.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 
 Logger logger = Logger.root;
 
@@ -17,7 +18,7 @@ main() {
       poolSize: 1);
 
   app.addPlugin(getMapperPlugin(dbManager));
-  app.setupConsoleLog(Level.INFO);
+  app.setupConsoleLog(Level.FINE);
   app.addModule(new Module()..bind(Interceptors));
   app.start(port: 8082);
 }
@@ -47,3 +48,11 @@ Future<shelf.Response> addItem(@Decode() FridgeItem item) async {
   return new shelf.Response.ok("");
 }
 
+@app.Route("/api/items/:id", methods: const [app.DELETE], responseType: 'application/json')
+Future<shelf.Response> deleteItem(String id) async {
+  await itemService.remove(where.id(new ObjectId.fromHexString(id)));
+
+  logger.info("Deleted item id: $id");
+
+  return new shelf.Response.ok("");
+}
