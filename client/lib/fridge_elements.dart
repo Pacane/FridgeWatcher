@@ -76,8 +76,8 @@ class FridgeElements extends PolymerElement with DiConsumer {
       ..name = itemName
       ..expiresOn = expirationDate);
 
-    fridgeItems
-        .add(new FridgeItemViewModel(itemName, expiresOn: expirationDate));
+    fridgeItems.add(new FridgeItemViewModel(itemName,
+        id: addedItem.id, expiresOn: addedItem.expiresOn));
 
     sortItemsByExpirationDate(fridgeItems);
   }

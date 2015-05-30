@@ -21,7 +21,7 @@ void main() {
     print("decoded : $decodedItems");
     var b = decodedItems.map((Map m) => decode(m, FridgeItem));
     print(b.toList()[0].name);
-  });
+  }, skip: true);
 
   test('add item should return the added item with an ID', () async {
     bootstrapMapper();
@@ -33,5 +33,8 @@ void main() {
       ..expiresOn = new DateTime.now().add(new Duration(days: 2)));
 
     expect(result.id, isNotNull);
+    expect(result.name, equals('banane'));
+    expect(result.expiresOn, isNotNull);
+    expect(result.addedOn, isNotNull);
   });
 }

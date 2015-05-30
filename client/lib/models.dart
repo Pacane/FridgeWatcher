@@ -34,15 +34,7 @@ class FridgeItemViewModel extends Observable {
 
   FridgeItemViewModel.unsaved();
 
-  FridgeItemViewModel(this.name, {this.addedOn: null, this.expiresOn: null, this.id: null}) {
-    if (addedOn == null) {
-      addedOn = new DateTime.now();
-    }
-
-    if (expiresOn == null) {
-      expiresOn = this.addedOn.add(new Duration(days: 14));
-    }
-  }
+  FridgeItemViewModel(this.name, {this.addedOn: null, this.expiresOn: null, this.id: null});
 
   bool get isExpired => new DateTime.now().isAfter(expiresOn);
   bool get saved => id != null;

@@ -38,8 +38,6 @@ class FridgeService {
 
     var bob = encodeJson(fridgeItem);
 
-    print(bob);
-
     http.Response response = await client.post(
         'http://localhost:8082/api/items',
         headers: {'Content-type': 'application/json'}, body: bob);
@@ -48,7 +46,7 @@ class FridgeService {
       throw new Exception("Couldn't add item : ${fridgeItem.name}");
     }
 
-    FridgeItem result = decode(JSON.decode(response.body), FridgeItem);
+    FridgeItem result = decodeJson(response.body, FridgeItem);
 
     return result;
   }

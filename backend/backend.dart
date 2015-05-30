@@ -24,15 +24,18 @@ main() {
 }
 
 MongoDb get mongoDb => app.request.attributes.dbConn;
-MongoDbService<FridgeItem> itemService = new MongoDbService<FridgeItem>('items');
+MongoDbService<FridgeItem> itemService =
+    new MongoDbService<FridgeItem>('items');
 @app.Route("/api/items")
 @Encode()
 listItems() {
   return itemService.find();
 }
 
-@app.Route("/api/items", methods: const [app.POST], responseType: 'application/json')
-Future<shelf.Response> addItem(@Decode() FridgeItem item) async {
+@app.Route("/api/items",
+    methods: const [app.POST], responseType: 'application/json')
+@Encode()
+Future<FridgeItem> addItem(@Decode() FridgeItem item) async {
   if (item.addedOn == null) {
     item.addedOn = new DateTime.now();
   }
@@ -41,14 +44,18 @@ Future<shelf.Response> addItem(@Decode() FridgeItem item) async {
     item.expiresOn = new DateTime.now().add(new Duration(days: 14));
   }
 
+  item.id = new ObjectId().toHexString();
+
   await itemService.insert(item);
 
-  logger.info("Added item");
-
-  return new shelf.Response.ok("");
+  return itemService.find(item).then((items) {
+    print(items[0]);
+    return items[0];
+  });
 }
 
-@app.Route("/api/items/:id", methods: const [app.DELETE], responseType: 'application/json')
+@app.Route("/api/items/:id",
+    methods: const [app.DELETE], responseType: 'application/json')
 Future<shelf.Response> deleteItem(String id) async {
   await itemService.remove(where.id(new ObjectId.fromHexString(id)));
 
