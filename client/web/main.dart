@@ -6,12 +6,16 @@ import 'package:polymer/polymer.dart';
 import 'package:redstone_mapper/mapper_factory.dart';
 import 'package:fridge_watcher/di.dart';
 import 'package:fridge_watcher/module.dart';
-import 'package:fridge_watcher/fridge_service.dart';
-import 'package:di/di.dart';
+import 'package:dart_config/default_browser.dart';
+import 'package:fridge_watcher/app_config.dart';
 
-main() {
+main() async {
+  Map config = await loadConfig();
+
+  AppConfig appConfig = new AppConfig()..apiBaseUrl = config['apiBaseUrl'];
+
   DiContext diContext = new DiContext();
-  diContext.installModules([getModule()]);
+  diContext.installModules([getModule()..bind(AppConfig, toValue: appConfig)]);
 
   bootstrapMapper();
   initPolymer();

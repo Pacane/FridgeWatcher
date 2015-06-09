@@ -9,18 +9,19 @@ import 'package:fridge_watcher_shared/fridge_item.dart';
 import 'package:fridge_watcher_backend/interceptors.dart';
 import 'package:di/di.dart';
 import 'package:mongo_dart/mongo_dart.dart';
+import 'package:dart_config/default_server.dart';
 
 Logger logger = Logger.root;
 
-main() {
-  var dbManager = new MongoDbManager(
-      "mongodb://pacane:dbpassword!@ds031902.mongolab.com:31902/fridge_watcher",
-      poolSize: 1);
+main() async {
+  Map config = await loadConfig();
+
+  var dbManager = new MongoDbManager(config['connectionString'], poolSize: 1);
 
   app.addPlugin(getMapperPlugin(dbManager));
   app.setupConsoleLog(Level.FINE);
   app.addModule(new Module()..bind(Interceptors));
-  app.start(port: 8082);
+  app.start(port: config['apiPort']);
 }
 
 MongoDb get mongoDb => app.request.attributes.dbConn;

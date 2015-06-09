@@ -1,0 +1,2 @@
+connectionString: mongodb://user:password!@instance.mongolab.com:1234/db_name
+apiPort: 8080
