@@ -14,7 +14,7 @@ final appModel = new Watcher();
  * [tasks] contains all tasks used in this app.
  */
 class Watcher extends Observable {
-  @observable List<FridgeItem> tasks;
+  @observable List<FridgeItemViewModel> tasks;
 }
 
 /**
@@ -26,24 +26,21 @@ class Watcher extends Observable {
  * the view layer to validate a task before assigning a taskID to the task. A
  * task with a taskID is considered saved.
  */
-class FridgeItem extends Observable {
-  @observable int itemID;
+class FridgeItemViewModel extends Observable {
+  @observable String id;
   @observable String name = '';
   @observable DateTime addedOn;
   @observable DateTime expiresOn;
 
-  FridgeItem.unsaved();
+  FridgeItemViewModel.unsaved();
 
-  FridgeItem(this.name, {this.addedOn: null, this.expiresOn: null}) {
-    if (addedOn == null) {
-      this.addedOn = new DateTime.now();
-    }
-
-    if (expiresOn == null) {
-      this.expiresOn = this.addedOn.add(new Duration(days: 14));
-    }
-  }
+  FridgeItemViewModel(this.name, {this.addedOn: null, this.expiresOn: null, this.id: null});
 
   bool get isExpired => new DateTime.now().isAfter(expiresOn);
-  bool get saved => itemID != null;
+  bool get saved => id != null;
+
+  String toString() {
+    return "$name : $addedOn : $expiresOn";
+  }
+
 }

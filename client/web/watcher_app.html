@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<link rel="import" href="../packages/polymer/polymer.html">
+<link rel="import" href="packages/fridge_watcher/fridge_element.html">
+
+<polymer-element name="watcher-app">
+    <template>
+        <!--<link rel="stylesheet" href="styles/main.css">-->
+
+        <!--<core-scaffold id="scaffold">-->
+        <!--<nav>-->
+        <!--<core-toolbar tool flex>-->
+        <!--<div flex>Home</div>-->
+        <!--</core-toolbar>-->
+        <!--<core-menu selected="-1">-->
+        <!--<paper-item>-->
+        <!--<core-icon icon="label-outline"></core-icon>-->
+        <!--<a href="/one">Single</a>-->
+        <!--</paper-item>-->
+        <!--</core-menu>-->
+        <!--</nav>-->
+        <core-toolbar tool>FridgeWatcher</core-toolbar>
+        <div id="content" layout vertical center-center flex>
+            <fridge-elements></fridge-elements>
+        </div>
+        <!--</core-scaffold>-->
+    </template>
+    <script type="application/dart" src="watcher_app.dart"></script>
+</polymer-element>

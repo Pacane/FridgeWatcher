@@ -1,7 +1,9 @@
+library fridge_watcher.events;
+
 import 'package:fridge_watcher/models.dart';
 
 class ItemDeletedEvent {
-  FridgeItem item;
+  FridgeItemViewModel item;
 
   ItemDeletedEvent(this.item);
 }

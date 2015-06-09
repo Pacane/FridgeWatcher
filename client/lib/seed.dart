@@ -6,17 +6,17 @@ library fridge_wacter.seed;
 
 import 'models.dart';
 
-List<FridgeItem> data = [
-  new FridgeItem('Lait'),
-  new FridgeItem('Oeufs',
+List<FridgeItemViewModel> data = [
+  new FridgeItemViewModel('Lait'),
+  new FridgeItemViewModel('Oeufs',
       expiresOn: new DateTime.now().add(new Duration(days: 21))),
-  new FridgeItem('Crème sure',
+  new FridgeItemViewModel('Crème sure',
       expiresOn: new DateTime.now().add(new Duration(days: 21))),
-  new FridgeItem('Jus',
+  new FridgeItemViewModel('Jus',
       expiresOn: new DateTime.now().add(new Duration(days: 14))),
-  new FridgeItem('Sauce Soya',
+  new FridgeItemViewModel('Sauce Soya',
       expiresOn: new DateTime.now().add(new Duration(days: 365))),
-  new FridgeItem('Brocolli',
+  new FridgeItemViewModel('Brocolli',
       addedOn: new DateTime.now().subtract(new Duration(days: 21)),
       expiresOn: new DateTime.now().subtract(new Duration(days: 5))),
 ];
