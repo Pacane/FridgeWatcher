@@ -20,15 +20,15 @@ import 'package:fridge_watcher/di.dart';
 class FridgeElements extends PolymerElement with DiConsumer {
   @observable final ObservableList<FridgeItemViewModel> fridgeItems =
       toObservable([]);
-  @observable final ObservableList<FridgeItemViewModel> doneItems =
+  @observable final ObservableList<FridgeItemViewModel> doneFridgeItems =
       toObservable([]);
   @observable Watcher app;
 
   FridgeService fridgeService;
 
   FridgeElements.created() : super.created() {
-    appModel.items = fridgeItems;
-    appModel.doneFridgeItems = doneItems;
+    appModel.fridgeItems = fridgeItems;
+    appModel.doneFridgeItems = doneFridgeItems;
   }
 
   Future fetchFridgeItems() async {
@@ -61,7 +61,7 @@ class FridgeElements extends PolymerElement with DiConsumer {
     Iterable viewModels =
         items.map((FridgeItem fi) => new FridgeItemViewModel(fi));
 
-    sortFridgeItems(viewModels, doneItems);
+    sortFridgeItems(viewModels, doneFridgeItems);
   }
 
   void attached() {
@@ -81,17 +81,17 @@ class FridgeElements extends PolymerElement with DiConsumer {
   void deleteItem(FridgeItemViewModel item) {
     item.done = true;
     fridgeItems.remove(item);
-    doneItems.add(item);
+    doneFridgeItems.add(item);
     sortItemsByExpirationDate(fridgeItems);
-    sortItemsByExpirationDate(doneItems);
+    sortItemsByExpirationDate(doneFridgeItems);
   }
 
   void undeleteItem(FridgeItemViewModel item) {
     item.done = false;
     fridgeItems.add(item);
-    doneItems.remove(item);
+    doneFridgeItems.remove(item);
     sortItemsByExpirationDate(fridgeItems);
-    sortItemsByExpirationDate(doneItems);
+    sortItemsByExpirationDate(doneFridgeItems);
   }
 
   Future addItem() async {

@@ -15,7 +15,7 @@ final appModel = new Watcher();
  * [tasks] contains all tasks used in this app.
  */
 class Watcher extends Observable {
-  @observable List<FridgeItemViewModel> items;
+  @observable List<FridgeItemViewModel> fridgeItems;
   @observable List<FridgeItemViewModel> doneFridgeItems;
 }
 
