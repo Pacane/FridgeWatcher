@@ -27,6 +27,16 @@ class FridgeService {
     return decodedItems.map((Map m) => decode(m, FridgeItem));
   }
 
+  Future<Iterable<FridgeItem>> getDoneItems() async {
+    bootstrapMapper();
+
+    http.Response response =
+    await client.get('${appConfig.apiBaseUrl}/items/done');
+
+    var decodedItems = JSON.decode(response.body);
+    return decodedItems.map((Map m) => decode(m, FridgeItem));
+  }
+
   Future deleteItem(String id) async {
     bootstrapMapper();
 
@@ -41,11 +51,13 @@ class FridgeService {
   Future<FridgeItem> addItem(FridgeItem fridgeItem) async {
     bootstrapMapper();
 
-    var bob = encodeJson(fridgeItem);
+    fridgeItem.done = false;
+
+    var encodedItem = encodeJson(fridgeItem);
 
     http.Response response = await client.post(
         '${appConfig.apiBaseUrl}/items',
-        headers: {'Content-type': 'application/json'}, body: bob);
+        headers: {'Content-type': 'application/json'}, body: encodedItem);
 
     if (response.statusCode != 200) {
       throw new Exception("Couldn't add item : ${fridgeItem.name}");
@@ -54,5 +66,16 @@ class FridgeService {
     FridgeItem result = decodeJson(response.body, FridgeItem);
 
     return result;
+  }
+
+  Future undeleteItem(String id) async {
+    bootstrapMapper();
+
+    http.Response response =
+    await client.put('${appConfig.apiBaseUrl}/items/$id');
+
+    if (response.statusCode != 200) {
+      throw new Exception("Couldn't undelete item with id : $id");
+    }
   }
 }

@@ -1,2 +1,3 @@
-connectionString: mongodb://pacane:dbpassword!@ds031902.mongolab.com:31902/fridge_watcher
+#connectionString: mongodb://pacane:dbpassword!@ds031902.mongolab.com:31902/fridge_watcher
+connectionString: mongodb://Pacane:dbpassword!@ds045252.mongolab.com:45252/fridge_watcher_test
 apiPort: 8082
