@@ -36,7 +36,7 @@ MigrationDirection directionFromString(String value) {
 
 MigrationDirection migrationDirection;
 
-List<Future> migrations = [addField_done_allItems()];
+List<Future> migrations = [addField_done_allItems];
 
 main(List<String> arguments) async {
   setupConsoleLog();
@@ -56,7 +56,9 @@ main(List<String> arguments) async {
 
   itemsCollection = db.collection("items");
 
-  await Future.wait(migrations);
+  for(var function in migrations) {
+    await function();
+  }
 
   await db.close();
 }
