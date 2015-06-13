@@ -20,18 +20,9 @@
 
         <paper-checkbox id="delete-item" on-change="{{onCheckChanged}}"></paper-checkbox>
         {{ viewModel.name }} -
-        <template if="{{ viewModel.isExpired }}">
-            <span class="expired">Expires on {{ formatter.format(viewModel.expiresOn) }}</span>
-        </template>
-        <template if="{{ !viewModel.isExpired }}">
-            <template if="{{ viewModel.expiresSoon }}">
-                <span class="expiresSoon">Expires on {{ formatter.format(viewModel.expiresOn) }}</span>
-            </template>
-            <template if="{{ !viewModel.expiresSoon }}">
-                <span>Expires on {{ formatter.format(viewModel.expiresOn) }}</span>
-            </template>
-        </template>
-
+        <span class="{{ viewModel.isExpired ? 'expired' : viewModel.expiresSoon ? 'expiresSoon' : '' }}">
+            Expires on {{ formatter.format(viewModel.expiresOn) }}
+        </span>
     </template>
     <script type="application/dart" src="fridge_element.dart"></script>
 </polymer-element>
