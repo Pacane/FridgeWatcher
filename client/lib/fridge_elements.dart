@@ -7,7 +7,7 @@ library fridge_watcher.fridge_elements;
 import 'package:polymer/polymer.dart';
 import 'package:fridge_watcher/models.dart';
 import 'package:fridge_watcher/event_bus.dart';
-import 'package:fridge_watcher/item_deleted_event.dart';
+import 'package:fridge_watcher/events.dart';
 import 'package:core_elements/core_input.dart';
 import 'package:intl/intl.dart';
 import 'dart:html';
@@ -20,31 +20,48 @@ import 'package:fridge_watcher/di.dart';
 class FridgeElements extends PolymerElement with DiConsumer {
   @observable final ObservableList<FridgeItemViewModel> fridgeItems =
       toObservable([]);
+  @observable final ObservableList<FridgeItemViewModel> doneFridgeItems =
+      toObservable([]);
   @observable Watcher app;
 
   FridgeService fridgeService;
 
   FridgeElements.created() : super.created() {
-    appModel.tasks = fridgeItems;
+    appModel.fridgeItems = fridgeItems;
+    appModel.doneFridgeItems = doneFridgeItems;
   }
 
   Future fetchFridgeItems() async {
     Iterable<FridgeItem> items = await fridgeService.getItems();
 
-    Iterable viewModels = items.map((FridgeItem fi) {
-      return new FridgeItemViewModel(fi.name,
-          addedOn: fi.addedOn, expiresOn: fi.expiresOn, id: fi.id);
-    });
+    Iterable viewModels =
+        items.map((FridgeItem fi) => new FridgeItemViewModel(fi));
 
-    fridgeItems.clear();
-    fridgeItems
-      ..addAll(viewModels)
-      ..sort((FridgeItemViewModel a, FridgeItemViewModel b) {
-        if (a.expiresOn.isBefore(b.expiresOn)) return -1;
-        else if (a.expiresOn.isAfter(b.expiresOn)) return 1;
-        else return 0;
-      })
+    sortFridgeItems(viewModels, fridgeItems);
+  }
+
+  void sortFridgeItems(Iterable<FridgeItemViewModel> newItems,
+      ObservableList<FridgeItemViewModel> viewModel) {
+    viewModel.clear();
+    viewModel
+      ..addAll(newItems)
+      ..sort(sortByExpirationDate)
       ..reversed;
+  }
+
+  sortByExpirationDate(FridgeItemViewModel a, FridgeItemViewModel b) {
+    if (a.expiresOn.isBefore(b.expiresOn)) return -1;
+    else if (a.expiresOn.isAfter(b.expiresOn)) return 1;
+    else return 0;
+  }
+
+  Future fetchDoneFridgeItems() async {
+    Iterable<FridgeItem> items = await fridgeService.getDoneItems();
+
+    Iterable viewModels =
+        items.map((FridgeItem fi) => new FridgeItemViewModel(fi));
+
+    sortFridgeItems(viewModels, doneFridgeItems);
   }
 
   void attached() {
@@ -54,11 +71,27 @@ class FridgeElements extends PolymerElement with DiConsumer {
         .on(ItemDeletedEvent)
         .listen((ItemDeletedEvent event) => deleteItem(event.item));
 
+    eventBus
+        .on(ItemUndeletedEvent)
+        .listen((ItemUndeletedEvent event) => undeleteItem(event.item));
+
     inject(this, [FridgeService]);
   }
 
   void deleteItem(FridgeItemViewModel item) {
+    item.done = true;
     fridgeItems.remove(item);
+    doneFridgeItems.add(item);
+    sortItemsByExpirationDate(fridgeItems);
+    sortItemsByExpirationDate(doneFridgeItems);
+  }
+
+  void undeleteItem(FridgeItemViewModel item) {
+    item.done = false;
+    fridgeItems.add(item);
+    doneFridgeItems.remove(item);
+    sortItemsByExpirationDate(fridgeItems);
+    sortItemsByExpirationDate(doneFridgeItems);
   }
 
   Future addItem() async {
@@ -76,8 +109,7 @@ class FridgeElements extends PolymerElement with DiConsumer {
       ..name = itemName
       ..expiresOn = expirationDate);
 
-    fridgeItems.add(new FridgeItemViewModel(itemName,
-        id: addedItem.id, expiresOn: addedItem.expiresOn));
+    fridgeItems.add(new FridgeItemViewModel(addedItem));
 
     sortItemsByExpirationDate(fridgeItems);
   }
@@ -85,11 +117,7 @@ class FridgeElements extends PolymerElement with DiConsumer {
   Iterable<FridgeItemViewModel> sortItemsByExpirationDate(
       List<FridgeItemViewModel> items) {
     return items
-      ..sort((FridgeItemViewModel a, FridgeItemViewModel b) {
-        if (a.expiresOn.isBefore(b.expiresOn)) return -1;
-        else if (a.expiresOn.isAfter(b.expiresOn)) return 1;
-        else return 0;
-      })
+      ..sort(sortByExpirationDate)
       ..reversed;
   }
 
@@ -98,5 +126,6 @@ class FridgeElements extends PolymerElement with DiConsumer {
     fridgeService = context[FridgeService];
 
     fetchFridgeItems();
+    fetchDoneFridgeItems();
   }
 }

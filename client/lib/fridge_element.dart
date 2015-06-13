@@ -7,7 +7,7 @@ import 'package:paper_elements/paper_checkbox.dart';
 import 'package:fridge_watcher/models.dart';
 import 'package:intl/intl.dart';
 import 'package:fridge_watcher/event_bus.dart';
-import 'package:fridge_watcher/item_deleted_event.dart';
+import 'package:fridge_watcher/events.dart';
 import 'package:fridge_watcher/di.dart';
 import 'package:fridge_watcher/fridge_service.dart';
 import 'dart:async';
@@ -31,11 +31,18 @@ class FridgeElement extends LIElement with Polymer, Observable, DiConsumer {
     if (checked) {
       await fridgeService.deleteItem(viewModel.id);
       eventBus.fire(new ItemDeletedEvent(viewModel));
+    } else {
+      await fridgeService.undeleteItem(viewModel.id);
+      eventBus.fire(new ItemUndeletedEvent(viewModel));
     }
   }
 
   @override
   void initDiContext(Map<Type, dynamic> context) {
     fridgeService = context[FridgeService];
+
+    if (viewModel.done) {
+      ($['delete-item'] as PaperCheckbox).checked = true;
+    }
   }
 }

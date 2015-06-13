@@ -7,3 +7,9 @@ class ItemDeletedEvent {
 
   ItemDeletedEvent(this.item);
 }
+
+class ItemUndeletedEvent {
+  FridgeItemViewModel item;
+
+  ItemUndeletedEvent(this.item);
+}

@@ -5,6 +5,7 @@
 library fridge_watcher.models;
 
 import 'package:polymer/polymer.dart';
+import 'package:fridge_watcher_shared/fridge_item.dart';
 
 final appModel = new Watcher();
 
@@ -14,7 +15,8 @@ final appModel = new Watcher();
  * [tasks] contains all tasks used in this app.
  */
 class Watcher extends Observable {
-  @observable List<FridgeItemViewModel> tasks;
+  @observable List<FridgeItemViewModel> fridgeItems;
+  @observable List<FridgeItemViewModel> doneFridgeItems;
 }
 
 /**
@@ -31,10 +33,17 @@ class FridgeItemViewModel extends Observable {
   @observable String name = '';
   @observable DateTime addedOn;
   @observable DateTime expiresOn;
+  @observable bool done;
 
   FridgeItemViewModel.unsaved();
 
-  FridgeItemViewModel(this.name, {this.addedOn: null, this.expiresOn: null, this.id: null});
+  FridgeItemViewModel(FridgeItem fridgeItem) {
+    id = fridgeItem.id;
+    name = fridgeItem.name;
+    addedOn = fridgeItem.addedOn;
+    expiresOn = fridgeItem.expiresOn;
+    done = fridgeItem.done;
+  }
 
   bool get isExpired => new DateTime.now().isAfter(expiresOn);
   bool get saved => id != null;
@@ -42,5 +51,4 @@ class FridgeItemViewModel extends Observable {
   String toString() {
     return "$name : $addedOn : $expiresOn";
   }
-
 }

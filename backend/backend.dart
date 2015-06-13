@@ -25,12 +25,20 @@ main() async {
 }
 
 MongoDb get mongoDb => app.request.attributes.dbConn;
+
 MongoDbService<FridgeItem> itemService =
     new MongoDbService<FridgeItem>('items');
+
 @app.Route("/api/items")
 @Encode()
 listItems() {
-  return itemService.find();
+  return itemService.find(where.eq('done', false));
+}
+
+@app.Route('/api/items/done')
+@Encode()
+listDoneItems() {
+  return itemService.find(where.eq('done', true));
 }
 
 @app.Route("/api/items",
@@ -49,18 +57,27 @@ Future<FridgeItem> addItem(@Decode() FridgeItem item) async {
 
   await itemService.insert(item);
 
-  return itemService.find(item).then((items) {
-    print(items[0]);
-    return items[0];
-  });
+  return itemService.find(item).then((items) => items[0]);
 }
 
-@app.Route("/api/items/:id",
-    methods: const [app.DELETE], responseType: 'application/json')
+@app.Route("/api/items/:id", methods: const [app.DELETE])
 Future<shelf.Response> deleteItem(String id) async {
-  await itemService.remove(where.id(new ObjectId.fromHexString(id)));
+  ObjectId oid = new ObjectId.fromHexString(id);
+  FridgeItem item = await itemService.findOne(where.id(oid));
+  await itemService.update(where.id(oid), item..done = true);
 
   logger.info("Deleted item id: $id");
+
+  return new shelf.Response.ok("");
+}
+
+@app.Route("/api/items/:id", methods: const [app.PUT])
+Future<shelf.Response> undeleteItem(String id) async {
+  ObjectId oid = new ObjectId.fromHexString(id);
+  FridgeItem item = await itemService.findOne(where.id(oid));
+  await itemService.update(where.id(oid), item..done = false);
+
+  logger.info("Undeleted item id: $id");
 
   return new shelf.Response.ok("");
 }
