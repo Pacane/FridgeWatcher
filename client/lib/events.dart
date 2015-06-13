@@ -13,3 +13,9 @@ class ItemUndeletedEvent {
 
   ItemUndeletedEvent(this.item);
 }
+
+class CannotPerformActionEvent {
+  String message;
+
+  CannotPerformActionEvent(this.message);
+}
