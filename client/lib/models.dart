@@ -46,6 +46,8 @@ class FridgeItemViewModel extends Observable {
   }
 
   bool get isExpired => new DateTime.now().isAfter(expiresOn);
+  bool get expiresSoon => expiresOn.isAfter(new DateTime.now()) &&
+      new DateTime.now().add(new Duration(days: 5)).isAfter(expiresOn);
   bool get saved => id != null;
 
   String toString() {
