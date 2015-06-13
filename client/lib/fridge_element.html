@@ -8,6 +8,10 @@
                 color: red;
             }
 
+            .expiresSoon {
+                color: #FF9800;
+            }
+
             :host {
                 list-style: none;
                 margin: 12px;
@@ -17,10 +21,15 @@
         <paper-checkbox id="delete-item" on-change="{{onCheckChanged}}"></paper-checkbox>
         {{ viewModel.name }} -
         <template if="{{ viewModel.isExpired }}">
-            <span class="expired"><span>! </span>Expires on {{ formatter.format(viewModel.expiresOn) }}</span>
+            <span class="expired">Expires on {{ formatter.format(viewModel.expiresOn) }}</span>
         </template>
         <template if="{{ !viewModel.isExpired }}">
-            <span>Expires on {{ formatter.format(viewModel.expiresOn) }}</span>
+            <template if="{{ viewModel.expiresSoon }}">
+                <span class="expiresSoon">Expires on {{ formatter.format(viewModel.expiresOn) }}</span>
+            </template>
+            <template if="{{ !viewModel.expiresSoon }}">
+                <span>Expires on {{ formatter.format(viewModel.expiresOn) }}</span>
+            </template>
         </template>
 
     </template>
