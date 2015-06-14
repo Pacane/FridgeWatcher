@@ -21,7 +21,7 @@
         <paper-checkbox id="delete-item" on-change="{{onCheckChanged}}"></paper-checkbox>
         {{ viewModel.name }} -
         <span class="{{ viewModel.isExpired ? 'expired' : viewModel.expiresSoon ? 'expiresSoon' : '' }}">
-            Expires on {{ formatter.format(viewModel.expiresOn) }}
+            {{ formatter.format(viewModel.expiresOn) }}
         </span>
     </template>
     <script type="application/dart" src="fridge_element.dart"></script>
