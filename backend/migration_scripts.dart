@@ -41,7 +41,7 @@ List<Future> migrations = [addField_done_allItems];
 main(List<String> arguments) async {
   setupConsoleLog();
 
-  final parser = new ArgParser()
+  new ArgParser()
     ..addOption('direction',
         abbr: 'd',
         help: 'select direction -- options: up/down',
