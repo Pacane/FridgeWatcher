@@ -10,7 +10,7 @@ void setupConsoleLog([Level level = Level.INFO]) {
   Logger.root.onRecord.listen((LogRecord rec) {
     if (rec.level >= Level.SEVERE) {
       var stack =
-      rec.stackTrace != null ? "\n${Trace.format(rec.stackTrace)}" : "";
+          rec.stackTrace != null ? "\n${Trace.format(rec.stackTrace)}" : "";
       print(
           '${rec.level.name}: ${rec.time}: ${rec.message} - ${rec.error}${stack}');
     } else {
@@ -56,7 +56,7 @@ main(List<String> arguments) async {
 
   itemsCollection = db.collection("items");
 
-  for(var function in migrations) {
+  for (var function in migrations) {
     await function();
   }
 

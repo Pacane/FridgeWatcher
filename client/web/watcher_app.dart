@@ -15,16 +15,16 @@ class WatcherApp extends PolymerElement {
   EventBus eventBus = fwEventBus.eventBus;
   PaperToast messageToast;
 
-  WatcherApp.created() : super.created() {
-  }
+  WatcherApp.created() : super.created() {}
 
   void attached() {
     messageToast = shadowRoot.querySelector("#messageToast");
 
-    eventBus.on(CannotPerformActionEvent).listen((CannotPerformActionEvent event) {
+    eventBus
+        .on(CannotPerformActionEvent)
+        .listen((CannotPerformActionEvent event) {
       messageToast.text = event.message;
       messageToast.show();
     });
   }
-
 }

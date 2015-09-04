@@ -31,7 +31,9 @@ class FridgeService {
 
     bootstrapMapper();
 
-    http.Response response = await client.get('${appConfig.apiBaseUrl}/items').catchError((_) => onError());
+    http.Response response = await client
+        .get('${appConfig.apiBaseUrl}/items')
+        .catchError((_) => onError());
 
     var decodedItems = JSON.decode(response.body);
     return decodedItems.map((Map m) => decode(m, FridgeItem));
@@ -46,8 +48,9 @@ class FridgeService {
 
     bootstrapMapper();
 
-    http.Response response =
-        await client.get('${appConfig.apiBaseUrl}/items/done').catchError((_) => onError());
+    http.Response response = await client
+        .get('${appConfig.apiBaseUrl}/items/done')
+        .catchError((_) => onError());
 
     var decodedItems = JSON.decode(response.body);
     return decodedItems.map((Map m) => decode(m, FridgeItem));
@@ -62,8 +65,9 @@ class FridgeService {
 
     bootstrapMapper();
 
-    http.Response response =
-        await client.delete('${appConfig.apiBaseUrl}/items/$id').catchError((_) => onError());
+    http.Response response = await client
+        .delete('${appConfig.apiBaseUrl}/items/$id')
+        .catchError((_) => onError());
 
     if (response.statusCode != 200) {
       onError();

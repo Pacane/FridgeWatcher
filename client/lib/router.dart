@@ -58,7 +58,10 @@ class Router extends Observable {
     if (action != null) action(currentPath); // Call the route handler.
   }
 
-  void dispatch({String url, String title, bool flash: false,
+  void dispatch(
+      {String url,
+      String title,
+      bool flash: false,
       bool alwaysDispatch: false}) {
     // Determine if we should just reload instead.
     if (Uri.parse(url).host != window.location.hostname &&

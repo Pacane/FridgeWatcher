@@ -34,7 +34,7 @@ class FridgeElement extends LIElement with Polymer, Observable, DiConsumer {
     } else {
       await fridgeService.undeleteItem(viewModel.id);
       eventBus.fire(new ItemUndeletedEvent(viewModel));
-    }  
+    }
   }
 
   @override
